@@ -1,0 +1,15 @@
+# executables
+*.exe
+
+# build folders
+build/
+
+# output / data
+*.csv
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
