@@ -18,6 +18,7 @@ static inline Vec3 get_magnetic_field(double t) {
         case llg::FieldType::Oscillating:
             return llg::B0 + llg::B_var * std::sin(arg);
 
+        // different planes of rotation
         case llg::FieldType::Rotating_XY:
             return llg::B0 + Vec3(
                 llg::B_var.x * std::cos(arg),

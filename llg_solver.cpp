@@ -75,7 +75,8 @@ int main() {
 
         out << t << "," << m.x << "," << m.y << "," << m.z << ","
             << B.x << "," << B.y << "," << B.z << "\n";
-
+        
+        // advance one time step
         m = heun_step_sllg(m, t, llg::dt, Bth, llg::gamma, llg::alpha);
     }
     return 0;
