@@ -7,16 +7,25 @@
 namespace llg {
     // simulation parameters
     inline constexpr double gamma = 1.760859e11; // rad/(s*T)
-    inline constexpr double alpha = 0.05;
+    inline constexpr double alpha = 0.05;    // dimensionless damping parameter
 
     inline constexpr double dt = 1e-16; // s
-    inline constexpr int    nsteps = 800000;
+    inline constexpr int    nsteps = 100000;
 
     // ---- Lattice ----
     inline constexpr int Nx = 16;
     inline constexpr int Ny = 16;
     inline constexpr int Nz = 16;
     inline constexpr bool periodic = true;
+
+    // --- Anisotropy ---
+    inline constexpr bool   use_anisotropy = true;
+
+    // Easy-axis direction (will be normalized in code, but keep it nice)
+    inline const Vec3 anis_u{0.0, 0.0, 1.0};
+
+    // Uniaxial anisotropy strength Ku in Joule
+    inline constexpr double Ku = 6.0e-23;
 
     // Exchange coupling (effective-field scale):
     // J > 0 : Ferromagnet
@@ -39,7 +48,7 @@ namespace llg {
     inline const Vec3 B_var{0.0, 0.0, 0.0};
     inline constexpr double f_B = 1e13; // Hz
     inline constexpr double phase = 0.0; // rad, phase = 0: sinusoidal start, phase = pi/2: cosinusoidal start
-    inline const Vec3 B0{0.0, 0.0, 15.0};
+    inline const Vec3 B0{0.0, 0.0, 20.0};
     inline const double pulse_duration = 5e-12; // only for FieldType::Pulse
     inline const double time_delay = 10e-12;      // only for FieldType::Pulse
 
@@ -49,7 +58,7 @@ namespace llg {
     inline constexpr double kB  = 1.380649e-23;      // J/K
     inline constexpr double muB = 9.2740100783e-24;  // J/T
 
-    inline constexpr double T = 2.0; // K
+    inline constexpr double T = 1.0; // K
 
     // spin parameters
     inline constexpr double g = 2.0;

@@ -67,7 +67,7 @@ def plot_3d_trajectory(t, mx, my, mz, stride=5, cmap="plasma",
     plt.tight_layout()
 
 if __name__ == "__main__":
-    t, mx, my, mz = load_traj("output_files/traj.csv")
+    t, mx, my, mz = load_traj("LLG_solver/traj_single_spin.csv")
 
     plot_components(t, mx, my, mz)
 

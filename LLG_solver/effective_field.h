@@ -3,7 +3,31 @@
 
 #include "vector.h"
 #include "parameters.h"
+#include <random>
 
+// Anisotropy field for uniaxial anisotropy
+static inline Vec3 anisotropy_field_uniax(const Vec3& m) {
+    if (!llg::use_anisotropy) return Vec3(0.0, 0.0, 0.0);
+
+    Vec3 u = llg::anis_u.normalized();
+    double mdotu = m.dot(u);
+
+    // B_ani = (2 Ku / mu) (m·u) u
+    const double pref = (2.0 * llg::Ku) / llg::mu;
+    return u * (pref * mdotu);
+}
+
+// Thermal field for sLLG (Gaussian, independent components)
+static inline Vec3 thermal_field(std::mt19937& rng)
+{
+    // sigma = sqrt( 2 α kB T / (γ μ dt) )
+    const double num = 2.0 * llg::alpha * llg::kB * llg::T;
+    const double den = llg::gamma * llg::mu * llg::dt;
+    const double sigma = std::sqrt(num / den);
+
+    std::normal_distribution<double> N01(0.0, 1.0);
+    return Vec3(sigma * N01(rng), sigma * N01(rng), sigma * N01(rng));
+}
 
 // Get external magnetic field at time t
 static inline Vec3 get_magnetic_field(double t) {
@@ -47,6 +71,13 @@ static inline Vec3 get_magnetic_field(double t) {
         default:
             return llg::B0; // fallback
     }
+}
+
+// Get total effective field at time t for magnetization m
+static inline Vec3 get_effective_field(double t, const Vec3& m) {
+    const Vec3 Bext = get_magnetic_field(t);
+    const Vec3 Bani = anisotropy_field_uniax(m);
+    return Bext + Bani;
 }
 
 #endif
