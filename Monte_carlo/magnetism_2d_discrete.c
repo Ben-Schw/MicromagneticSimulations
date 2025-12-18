@@ -1,11 +1,11 @@
-/**** Monte Carlo simulation of the 2D Ising model (anti/ferromagnet) ****/
+/**** Monte Carlo simulation of the 2D Ising model (anti/ferromagnet) with periodic boundary conditions****/
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
 
 #define latticeSize 16
-#define bn 0.125
+#define bn 0.125 // parameter for finite-size scaling
 #define gn 1.25
 #define nuinvers 1
 #define J 1.0
@@ -19,8 +19,8 @@ double Magnetisierung(void);
 double Suszeptibilitaet(double temp, double wurzel, double magsquared);
 double NeelVector(void);
 void write(double limit, FILE *fp, double temp);
-int GetLeft(int index);
-int GetRight(int index);
+int GetLower(int index);
+int GetHigher(int index);
 
 /**** Initialize lattice ****/
 int fillLattice(void) {
@@ -86,19 +86,19 @@ void write(double limit, FILE *fp, double temp) {
 /**** Energy change for flipping spin (i,j): ΔE = 2 J s_ij * sum_nn s_nn ****/
 double Hamiltonian(int i, int j) {
     double ham = (double)2 * J * lattice[i][j] *
-                 (lattice[GetLeft(i)][j] + lattice[GetRight(i)][j] +
-                  lattice[i][GetLeft(j)] + lattice[i][GetRight(j)]);
+                 (lattice[GetLower(i)][j] + lattice[GetHigher(i)][j] +
+                  lattice[i][GetLower(j)] + lattice[i][GetHigher(j)]);
     return ham;
 }
 
-/**** Periodic boundary: left neighbor index ****/
-int GetLeft(int index) {
+/**** Periodic boundary: lower neighbor index ****/
+int GetLower(int index) {
     if (index == 0) return latticeSize - 1;
     return index - 1;
 }
 
-/**** Periodic boundary: right neighbor index ****/
-int GetRight(int index) {
+/**** Periodic boundary: higher neighbor index ****/
+int GetHigher(int index) {
     if (index == latticeSize - 1) return 0;
     return index + 1;
 }
