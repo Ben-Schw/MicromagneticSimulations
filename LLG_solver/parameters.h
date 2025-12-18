@@ -54,7 +54,9 @@ namespace llg {
 
     inline constexpr FieldType field_mode = FieldType::Constant;
 
-    // thermal
+    
+    // thermal field
+    inline constexpr bool use_thermal_field = true;
     inline constexpr double kB  = 1.380649e-23;      // J/K
     inline constexpr double muB = 9.2740100783e-24;  // J/T
 

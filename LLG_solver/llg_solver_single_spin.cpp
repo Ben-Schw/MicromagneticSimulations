@@ -29,7 +29,10 @@ static inline Vec3 heun_step_sllg(const Vec3& m, double t, double dt,
                                   double gamma, double alpha, std::mt19937& rng)
 {
     // thermal field (same for predictor and corrector)
-    const Vec3 Bth = thermal_field(rng);
+    Vec3 Bth{0.0, 0.0, 0.0};
+    if (llg::use_thermal_field) {
+        Vec3 Bth = thermal_field(rng);
+    }
 
     // field at time t (deterministic)
     const Vec3 B0 = get_effective_field(t, m);

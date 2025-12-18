@@ -7,8 +7,6 @@
 
 // Anisotropy field for uniaxial anisotropy
 static inline Vec3 anisotropy_field_uniax(const Vec3& m) {
-    if (!llg::use_anisotropy) return Vec3(0.0, 0.0, 0.0);
-
     Vec3 u = llg::anis_u.normalized();
     double mdotu = m.dot(u);
 
@@ -76,8 +74,12 @@ static inline Vec3 get_magnetic_field(double t) {
 // Get total effective field at time t for magnetization m
 static inline Vec3 get_effective_field(double t, const Vec3& m) {
     const Vec3 Bext = get_magnetic_field(t);
-    const Vec3 Bani = anisotropy_field_uniax(m);
-    return Bext + Bani;
+
+    if (llg::use_anisotropy) {
+        Bext += anisotropy_field_uniax(m);
+    }
+
+    return Bext;
 }
 
 #endif
