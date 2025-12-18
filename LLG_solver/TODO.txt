@@ -1,0 +1,12 @@
+- Implementation of a three dimensional grid
+- Interactions should be read in through a file looking like
+
+#i  j   k   J_ijk
+1   0   0   1.0
+0   1   0   3.0
+0   0   1   2.0
+-1  0   0   1.0
+0   -1  0   3.0
+0   0   -1  2.0
+
+This file will be material specific and allows the solving of LLG for complex real life materials.

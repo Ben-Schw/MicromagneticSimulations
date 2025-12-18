@@ -12,12 +12,6 @@ namespace llg {
     inline constexpr double dt = 1e-16; // s
     inline constexpr int    nsteps = 100000;
 
-    // ---- Lattice ----
-    inline constexpr int Nx = 16;
-    inline constexpr int Ny = 16;
-    inline constexpr int Nz = 16;
-    inline constexpr bool periodic = true;
-
     // --- Anisotropy ---
     inline constexpr bool   use_anisotropy = true;
 
@@ -31,16 +25,6 @@ namespace llg {
     // J > 0 : Ferromagnet
     // J < 0 : Antiferromagnet
     inline constexpr double J = +0.2;
-
-    // Init
-    enum class InitType { Uniform, AFM_Checkerboard, Random };
-    inline constexpr InitType init_type = InitType::AFM_Checkerboard;
-
-    inline const Vec3 m_init{1.0, 0.0, 0.0}; // used for Uniform init
-
-    // ---- Output ----
-    enum class OutputAxis { X, Y, Z };
-    inline constexpr OutputAxis output_axis = OutputAxis::Z;
 
     // external field (Tesla)
     enum class FieldType { Constant, Oscillating, Rotating_XY, Rotating_YZ, Rotating_XZ, Pulse }; // rotation in respective plane anticlockwise when looking along positive axis
@@ -66,6 +50,24 @@ namespace llg {
     inline constexpr double g = 2.0;
     inline constexpr double S = 1.0;               // spin quantum number
     inline constexpr double mu = g * muB * S;      // J/T
+
+    // ---- Lattice ----
+    inline constexpr int Nx = 16;
+    inline constexpr int Ny = 16;
+    inline constexpr int Nz = 16;
+
+    // Boundary conditions
+    inline constexpr Vec3i boundary_conditions{1, 1, 1}; // 0: open, 1: periodic
+
+    // Init
+    enum class InitType { Uniform, AFM_Checkerboard, Random };
+    inline constexpr InitType init_type = InitType::AFM_Checkerboard;
+
+    inline const Vec3 m_init{1.0, 0.0, 0.0}; // used for Uniform init
+
+    // ---- Output ----
+    enum class OutputAxis { X, Y, Z };
+    inline constexpr OutputAxis output_axis = OutputAxis::Z;
 
     inline constexpr unsigned int rng_seed = 12345;
 }

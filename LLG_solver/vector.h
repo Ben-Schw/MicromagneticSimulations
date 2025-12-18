@@ -54,4 +54,16 @@ struct Vec3 {
 
 inline Vec3 operator*(double s, const Vec3& v) { return v * s; }
 
+struct Vec3i {
+    int x, y, z;
+
+    constexpr Vec3i() : x(0), y(0), z(0) {}
+    constexpr Vec3i(int x_, int y_, int z_) : x(x_), y(y_), z(z_) {}
+
+    constexpr bool periodic_x() const { return x != 0; }
+    constexpr bool periodic_y() const { return y != 0; }
+    constexpr bool periodic_z() const { return z != 0; }
+
+};
+
 #endif
