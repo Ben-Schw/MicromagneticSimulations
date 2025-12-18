@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define latticeSize 64
+#define latticeSize 16
 #define bn 0.125 // parameter for finite-size scaling
 #define gn 1.25
 #define nuinvers 1
