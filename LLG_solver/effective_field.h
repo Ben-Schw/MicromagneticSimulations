@@ -73,7 +73,11 @@ static inline Vec3 get_magnetic_field(double t) {
 
 // Get total effective field at time t for magnetization m
 static inline Vec3 get_effective_field(double t, const Vec3& m) {
-    const Vec3 Bext = get_magnetic_field(t);
+    Vec3 Bext = {0.0, 0.0, 0.0};
+    
+    if (llg::use_external_field) {
+        Bext += get_magnetic_field(t);
+    }
 
     if (llg::use_anisotropy) {
         Bext += anisotropy_field_uniax(m);

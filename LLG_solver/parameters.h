@@ -27,6 +27,7 @@ namespace llg {
     inline constexpr double J = +0.2;
 
     // external field (Tesla)
+    inline constexpr bool use_external_field = true;
     enum class FieldType { Constant, Oscillating, Rotating_XY, Rotating_YZ, Rotating_XZ, Pulse }; // rotation in respective plane anticlockwise when looking along positive axis
 
     inline const Vec3 B_var{0.0, 0.0, 0.0};
