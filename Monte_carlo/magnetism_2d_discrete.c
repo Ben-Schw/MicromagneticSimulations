@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define latticeSize 16
+#define latticeSize 64
 #define bn 0.125 // parameter for finite-size scaling
 #define gn 1.25
 #define nuinvers 1
@@ -49,10 +49,8 @@ int metropolis(double temp) {
 
 /**** Write measured observables ****/
 void write(double limit, FILE *fp, double temp) {
-    double mean_m2 = 0.0;      // <m^2> with m = |magnetization per spin|
+    double mean_m2 = 0.0;      // <m^2> 
     double mean_m = 0.0;       // <m>
-    double mean_abs_m = 0.0;   // <|m|> 
-
     double mean_neel = 0.0;    // <Neel>
     double mean_neel_abs = 0.0; // <|Neel|>
 
@@ -65,30 +63,26 @@ void write(double limit, FILE *fp, double temp) {
             double m  = magnetisation();
             mean_m  += m / (0.3 * limit);
             mean_m2 += (m * m) / (0.3 * limit);
-            mean_abs_m += fabs(m) / (0.3 * limit);
 
             mean_neel += neelVector() / (0.3 * limit);
-            mean_neel_abs += fabs(neelVector()) / (0.3 * limit);
         }
     }
 
     double m_mean_sq = pow(mean_m, 2.0);        // <m>^2
-    double neel_sq   = pow(mean_neel, 2.0);     // <Neel>^2
 
     double sus = susceptibility(temp, mean_m2, m_mean_sq);
     double sqrt_m_squared = sqrt(mean_m2);
 
     //output
-    fprintf(fp, "%g, %g, %g, %g, %g, %g, %g, %g, %g\n",
+    fprintf(fp, "%g, %g, %g, %g, %g, %g, %g, %g\n",
             -(temp - 2.269) / 2.269,
             B,
-            mean_abs_m,
             sqrt_m_squared,
+            mean_neel,
             sus,
             pow(latticeSize, bn),
             pow(latticeSize, gn),
-            pow(latticeSize, nuinvers),
-            mean_neel_abs);
+            pow(latticeSize, nuinvers));
 }
 
 /**** Energy change for flipping spin (i,j): ΔE = 2 J s_ij * sum_nn s_nn + 2 B s_ij ****/
@@ -143,22 +137,26 @@ double neelVector(void) {
 int main(void) {
     srand((unsigned)time(NULL));
 
+    // open output file
     FILE *f = fopen("2dLatticeSize16.csv", "w");
     if (!f) { perror("fopen"); return 1; }
 
-    fprintf(f, "T_reduced, B, <m>^2, sqrt(<m^2>), chi, L^b, L^g, L^(1/nu), <|Neel|>^2\n");
+    fprintf(f, "T_reduced, B, sqrt(<m^2>), N, chi, L^b, L^g, L^(1/nu)\n");
 
+    // initialize lattice
     fillLattice();
 
-    double incr = 0.02;
+    // temperature loop
+    double incr = 0.01;
     for (double temp = incr; temp < 4.0; temp += incr) {
 
+        // adjust number of MC steps based on temperature (more steps near critical temperature)
         if (temp <= 2.0) {
-            write(1000.0, f, temp);
+            write(900.0, f, temp);
         } else if (temp < 2.4) {
-            write(100000.0, f, temp);
+            write(300000.0, f, temp);
         } else {
-            write(10000.0, f, temp);
+            write(12000.0, f, temp);
         }
     }
 

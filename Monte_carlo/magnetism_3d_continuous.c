@@ -191,11 +191,11 @@ int main(void) {
     for (temp = 0.0; temp <= 4.0; temp += 0.02) {
 
         if (temp <= 2.0) {
-            mc_steps(temp, 1000, f);
+            mc_steps(temp, 900, f);
         } else if (temp < 2.4) {
-            mc_steps(temp, 100000, f);
+            mc_steps(temp, 300000, f);
         } else {
-            mc_steps(temp, 10000, f);
+            mc_steps(temp, 12000, f);
         }
 
     }
