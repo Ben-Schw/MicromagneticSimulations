@@ -9,6 +9,7 @@
 #define gn 1.25
 #define nuinvers 1
 #define J 1.0
+#define B 0.1
 
 int lattice[latticeSize][latticeSize];
 
@@ -72,8 +73,9 @@ void write(double limit, FILE *fp, double temp) {
     double sqrt_m2 = sqrt(mean_m2);
 
     // CSV-like output (no trailing comma)
-    fprintf(fp, "%g, %g, %g, %g, %g, %g, %g, %g\n",
+    fprintf(fp, "%g, %g, %g, %g, %g, %g, %g, %g, %g\n",
             -(temp - 2.269) / 2.269,
+            B,
             m_mean_sq,
             sqrt_m2,
             sus,
@@ -83,11 +85,11 @@ void write(double limit, FILE *fp, double temp) {
             neel_sq);
 }
 
-/**** Energy change for flipping spin (i,j): ΔE = 2 J s_ij * sum_nn s_nn ****/
+/**** Energy change for flipping spin (i,j): ΔE = 2 J s_ij * sum_nn s_nn + B * s_ij ****/
 double Hamiltonian(int i, int j) {
     double ham = (double)2 * J * lattice[i][j] *
                  (lattice[GetLower(i)][j] + lattice[GetHigher(i)][j] +
-                  lattice[i][GetLower(j)] + lattice[i][GetHigher(j)]);
+                  lattice[i][GetLower(j)] + lattice[i][GetHigher(j)]) + (double) B * lattice[i][j];
     return ham;
 }
 
@@ -141,6 +143,8 @@ int main(void) {
 
     FILE *f = fopen("QuelleLatticeSize128f.txt", "w");
     if (!f) { perror("fopen"); return 1; }
+
+    fprintf(f, "T, B, <m>^2, sqrt(<m^2>), chi, L^b, L^g, L^(1/nu), <|Neel|>^2\n");
 
     fillLattice();
 
