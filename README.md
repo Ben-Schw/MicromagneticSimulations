@@ -8,10 +8,9 @@ Also, this repostiory contains a cluster analysis with the Hoshen-Kopelman algor
 Furthermore, there is a folder containing smaller issues like computing Pi through Monte Carlo simulation.
 
 Lastly, we have the LLG solver (Landau-Lifshitz-Gilbert equation). This simulates the dynamics of individual spins in a lattice. Global temperature, magnetic field, and uniaxial anisotropy is implemented. The grid assumes isotropic exchange between the spins, which is the same for all spins. The parameters of this simulation can be altered via "parameters.h". (language: C++)
-
-Some plotting is also implemented. (language: Python)
-
 Future add-ons might contain: 
 - Implementation of sublattices of the grid
 - Locality of magnetic and temperature field
 - ...
+
+Some plotting is also implemented. (language: Python)
