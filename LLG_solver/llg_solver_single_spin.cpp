@@ -31,7 +31,7 @@ static inline Vec3 heun_step_sllg(const Vec3& m, double t, double dt,
     // thermal field (same for predictor and corrector)
     Vec3 Bth{0.0, 0.0, 0.0};
     if (llg::use_thermal_field) {
-        Vec3 Bth = thermal_field(rng);
+        Bth = thermal_field(rng);
     }
 
     // field at time t (deterministic)
@@ -56,7 +56,7 @@ int main() {
     Vec3 m = llg::m_init.normalized();
 
     std::ofstream out("traj_single_spin.csv");
-    out << "t,mx,my,mz,Bx,By,Bz\n";
+    out << "t,T,mx,my,mz,Bx,By,Bz\n";
     out << std::setprecision(12);
 
     for (int i = 0; i < llg::nsteps; ++i) {
@@ -64,7 +64,7 @@ int main() {
 
         Vec3 B = get_magnetic_field(t);
 
-        out << t << "," << m.x << "," << m.y << "," << m.z << ","
+        out << t << "," << llg::T << "," << m.x << "," << m.y << "," << m.z << ","
             << B.x << "," << B.y << "," << B.z << "\n";
         
         // advance one time step

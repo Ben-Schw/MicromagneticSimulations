@@ -47,7 +47,7 @@ namespace llg {
     inline const Vec3 B_var{0.0, 0.0, 0.0};
     inline constexpr double f_B = 1e13; // Hz
     inline constexpr double phase = 0.0; // rad, phase = 0: sinusoidal start, phase = pi/2: cosinusoidal start
-    inline const Vec3 B0{0.0, 0.0, 20.0};
+    inline const Vec3 B0{0.0, 0.0, 0.0};
     inline const double pulse_duration = 5e-12; // only for FieldType::Pulse
     inline const double time_delay = 10e-12;      // only for FieldType::Pulse
 
@@ -59,7 +59,7 @@ namespace llg {
     inline constexpr double kB  = 1.380649e-23;      // J/K
     inline constexpr double muB = 9.2740100783e-24;  // J/T
 
-    inline constexpr double T = 1.0; // K
+    inline constexpr double T = 10.0; // K
 
     // spin parameters
     inline constexpr double g = 2.0;
@@ -78,7 +78,7 @@ namespace llg {
     enum class InitType { Uniform, AFM_Checkerboard, Random };
     inline constexpr InitType init_type = InitType::AFM_Checkerboard;
 
-    inline const Vec3 m_init{1.0, 0.0, 0.0}; // used for Uniform init
+    inline const Vec3 m_init{0.0, 0.0, 1.0}; // used for Uniform init
 
     // ---- Output ----
     enum class OutputAxis { X, Y, Z };

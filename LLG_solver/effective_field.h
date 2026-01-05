@@ -3,7 +3,7 @@
 
 #include "vector.h"
 #include "parameters.h"
-#include <grid.h>
+#include "grid.h"
 #include <random>
 
 // Anisotropy field for uniaxial anisotropy
