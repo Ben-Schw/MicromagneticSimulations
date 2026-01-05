@@ -72,27 +72,35 @@ int main() {
     SpinGrid grid(llg::Nx, llg::Ny, llg::Nz, llg::bc);
     grid.initialize_all(llg::m_init);
     std::ofstream out("traj_spin_grid.csv");
-    out << "t,x,y,z,mx,my,mz,Bx,By,Bz\n";
-    out << std::setprecision(12);   
+    out << "t,x,y,z,mx,my,mz,Bx,By,Bz,T\n";
+    out << std::setprecision(12);
+    
+    double T = llg::T;
+
     for (int step = 0; step < llg::nsteps; ++step) {
         double t = step * llg::dt;
 
+        Vec3 B = get_magnetic_field(t);
+
         for (int z = 0; z < llg::Nz; ++z) {
+
+            Vec3 layer_mag(0.0, 0.0, 0.0);
+
             for (int y = 0; y < llg::Ny; ++y) {
                 for (int x = 0; x < llg::Nx; ++x) {
                     int idx = grid.index_raw(x, y, z);
                     Vec3 m = grid.spin_linear(idx);
-
-                    Vec3 B = get_magnetic_field(t);
-
-                    out << t << "," << x << "," << y << "," << z << ","
-                        << m.x << "," << m.y << "," << m.z << ","
-                        << B.x << "," << B.y << "," << B.z << "\n";
+                    // accumulate layer magnetization
+                    layer_mag += m * llg::mu / (llg::Nx * llg::Ny);
 
                     Vec3 m_next = heun_step_sllg(grid, x, y, z, m, t, llg::dt, llg::gamma, llg::alpha, rng);
                     grid.at_raw(x, y, z) = m_next;
                 }
             }
+            // Output layer magnetization
+            out << t << "," << 0 << "," << 0 << "," << z << ","
+                << layer_mag.x << "," << layer_mag.y << "," << layer_mag.z << ","
+                << B.x << "," << B.y << "," << B.z << "," << T << "\n";
         }
     }
     return 0;
