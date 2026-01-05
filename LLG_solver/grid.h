@@ -74,16 +74,16 @@ public:
         }
     }
 
+    int index_raw(int x, int y, int z) const{
+        return x + Nx * (y + Ny * z);
+    }
+
+
     int Nx, Ny, Nz;
     Vec3i bc;
 
 private:
     std::vector<Vec3> spins;
-
-    int index_raw(int x, int y, int z) const
-    {
-        return x + Nx * (y + Ny * z);
-    }
 
     static int apply_bc(int i, int N, bool periodic)
     {
