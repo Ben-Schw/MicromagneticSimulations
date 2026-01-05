@@ -3,6 +3,7 @@
 
 #include "vector.h"
 #include "parameters.h"
+#include <grid.h>
 #include <random>
 
 // Anisotropy field for uniaxial anisotropy
@@ -13,6 +14,21 @@ static inline Vec3 anisotropy_field_uniax(const Vec3& m) {
     // B_ani = (2 Ku / mu) (m·u) u
     const double pref = (2.0 * llg::Ku) / llg::mu;
     return u * (pref * mdotu);
+}
+
+// exchange field for a given spin grid at position (x,y,z)
+inline Vec3 exchange_field(const SpinGrid& grid, int x, int y, int z, double mu)
+{
+    Vec3 sum(0.0, 0.0, 0.0);
+
+    for (const auto& it : llg::exchange_interactions) {
+        const int j = grid.neighbor_index(x, y, z, it.dx, it.dy, it.dz);
+        if (j >= 0) {
+            sum += grid.spin_linear(j) * it.J;
+        }
+    }
+
+    return (1.0 / mu) * sum;
 }
 
 // Thermal field for sLLG (Gaussian, independent components)

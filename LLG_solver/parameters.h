@@ -2,12 +2,15 @@
 #define LLG_PARAMS_H
 
 #include <cmath>
+#include <array>
 #include "vector.h"
 
 namespace llg {
     // simulation parameters
     inline constexpr double gamma = 1.760859e11; // rad/(s*T)
     inline constexpr double alpha = 0.05;    // dimensionless damping parameter
+    inline constexpr double meV_to_J = 1.602176634e-22; // 1 meV in Joule
+
 
     inline constexpr double dt = 1e-16; // s
     inline constexpr int    nsteps = 100000;
@@ -18,13 +21,24 @@ namespace llg {
     // Easy-axis direction (will be normalized in code, but keep it nice)
     inline const Vec3 anis_u{0.0, 0.0, 1.0};
 
-    // Uniaxial anisotropy strength Ku in Joule
-    inline constexpr double Ku = 6.0e-23;
+    // Uniaxial anisotropy strength Ku in meV
+    inline constexpr double Ku = 0.5 * meV_to_J; // meV
 
     // Exchange coupling (effective-field scale):
-    // J > 0 : Ferromagnet
-    // J < 0 : Antiferromagnet
-    inline constexpr double J = +0.2;
+    // J_ij in meV between neighboring spins at (i,j,k) and (i+dx,j+dy,k+dz)
+    struct Interaction {
+        int dx, dy, dz;
+        double J;
+    };
+    // Nearest-neighbor exchange interactions (J in meV)
+    inline constexpr std::array<Interaction, 6> exchange_interactions {{
+        {+1, 0, 0, 50.0 * meV_to_J},
+        {-1, 0, 0, 50.0 * meV_to_J},
+        {0, +1, 0, 50.0 * meV_to_J},
+        {0, -1, 0, 50.0 * meV_to_J},
+        {0, 0, +1, 50.0 * meV_to_J},
+        {0, 0, -1, 50.0 * meV_to_J},
+    }};
 
     // external field (Tesla)
     inline constexpr bool use_external_field = true;
@@ -58,7 +72,7 @@ namespace llg {
     inline constexpr int Nz = 16;
 
     // Boundary conditions
-    inline constexpr Vec3i boundary_conditions{1, 1, 1}; // 0: open, 1: periodic
+    inline constexpr Vec3i bc{1, 1, 1}; // 0: open, 1: periodic
 
     // Init
     enum class InitType { Uniform, AFM_Checkerboard, Random };
